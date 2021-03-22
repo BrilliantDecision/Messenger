@@ -18,3 +18,5 @@ class Authentication(FormView):
         obj1 = get_user_model().objects.filter(username=login_or_email, password=password).first()
         obj2 = get_user_model().objects.filter(email=login_or_email, password=password).first()
         return JsonResponse({'detail': 'OK'})
+
+
