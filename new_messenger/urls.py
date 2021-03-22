@@ -6,7 +6,7 @@ urlpatterns = [
     path('authentication/', views.authentication),
     path('get_user_chats/<user_id>/', views.get_user_chats),
     path('get_chat_users/<chat_id>/', views.get_chat_users),
-    path('get_chat_messeges/<chat_id>/', views.get_chat_messages),
+    path('get_chat_messages/<chat_id>/', views.get_chat_messages),
 ]
 
 
