@@ -1,23 +1,28 @@
 from django.db import models
-from django.contrib.auth import get_user_model
 
 
 # Create your models here.
 class ChatUser(models.Model):
-    user = models.ForeignKey(get_user_model(), related_name='profile_user', on_delete=models.CASCADE, null=True)
+    login = models.CharField('Login', max_length=100)
+    password = models.CharField('password', max_length=100)
+    email = models.EmailField('Email', default='')
+    first_name = models.CharField('First name', default='', max_length=100)
+    second_name = models.CharField('Second_name', default='', max_length=100)
     status = models.TextField('Text', max_length=100)
+    is_active = models.BooleanField('Is active', default=True)
+    last_login = models.DateTimeField('Last login', null=True)
 
     def __str__(self):
-        return f'{self.user}'
+        return f'{self.login}'
 
     class Meta:
-        verbose_name = 'Additional user information'
-        verbose_name_plural = 'Additional user information'
+        verbose_name = 'Our user'
+        verbose_name_plural = 'Our user'
 
 
 class Chat(models.Model):
     name = models.CharField('Name', max_length=100)
-    admin = models.ForeignKey(get_user_model(), related_name='user_admin', on_delete=models.CASCADE, null=True)
+    admin = models.ForeignKey(ChatUser, related_name='user_admin', on_delete=models.CASCADE, null=True)
     create_date = models.DateField('Create date', null=True)
     private = models.BooleanField('Is private', default=False)
 
@@ -30,7 +35,7 @@ class Chat(models.Model):
 
 
 class ChatUsers(models.Model):
-    user = models.ForeignKey(get_user_model(), related_name='chat_users_user', on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(ChatUser, related_name='chat_users_user', on_delete=models.CASCADE, null=True)
     chat = models.ForeignKey(Chat, related_name='chat_users_chat', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
@@ -49,7 +54,7 @@ class ChatUsers(models.Model):
 
 
 class Messages(models.Model):
-    user = models.ForeignKey(get_user_model(), related_name='messages_user', on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(ChatUser, related_name='messages_user', on_delete=models.CASCADE, null=True)
     chat = models.ForeignKey(Chat, related_name='messages_chat', on_delete=models.CASCADE, null=True)
     text = models.TextField('Text', max_length=500)
     send_date = models.DateTimeField('Send date', null=True)

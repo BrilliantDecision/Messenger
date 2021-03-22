@@ -11,8 +11,8 @@ class ChatAdmin(admin.ModelAdmin):
 
 @admin.register(ChatUser)
 class ChatUserAdmin(admin.ModelAdmin):
-    list_display = ('user', 'status')
-    list_display_links = ('user',)
+    list_display = ('login', 'email', 'last_login', 'is_active')
+    list_display_links = ('login', 'email', 'last_login', 'is_active')
 
 
 @admin.register(ChatUsers)

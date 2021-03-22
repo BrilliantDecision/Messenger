@@ -1,9 +1,12 @@
 from django.urls import path, include
-from new_messenger.views import Authentication
+from new_messenger import views
 
 
 urlpatterns = [
-    path('authentication/', view=Authentication.as_view())
+    path('authentication/', views.authentication),
+    path('get_user_chats/<user_id>/', views.get_user_chats),
+    path('get_chat_users/<chat_id>/', views.get_chat_users),
+    path('get_chat_messeges/<chat_id>/', views.get_chat_messages),
 ]
 
 
