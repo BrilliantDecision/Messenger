@@ -16,7 +16,7 @@ from django.core.exceptions import ObjectDoesNotExist
 def check_login(request):
     login = request.GET.get('login')
     if login:
-        if ChatUser.objects.filter(login=login).first().count() == 0:
+        if ChatUser.objects.filter(login=login).count() == 0:
             return JsonResponse({'detail': 'OK'})
         else:
             return JsonResponse({'detail': 'Error, login is already in database'})
@@ -31,7 +31,7 @@ def registration(request):
     first_name = request.GET.get('first_name')
     second_name = request.GET.get('second_name')
     if login and email and password and first_name and second_name:
-        obj = ChatUser(login=login, email=email, password=password, first_name=first_name, second_name=second_name)
+        ChatUser(login=login, email=email, password=password, first_name=first_name, second_name=second_name)
         return JsonResponse({"detail": "OK"})
     else:
         return JsonResponse({'detail': 'Missing arguments'})
