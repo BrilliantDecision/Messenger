@@ -13,6 +13,30 @@ from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 # authentication view
 # @method_decorator(csrf_exempt)
+def check_login(request):
+    login = request.GET.get('login')
+    if login:
+        if ChatUser.objects.filter(login=login).first().count() == 0:
+            return JsonResponse({'detail': 'OK'})
+        else:
+            return JsonResponse({'detail': 'Error, login is already in database'})
+    else:
+        return JsonResponse({'detail': 'Missing arguments'})
+
+
+def registration(request):
+    login = request.GET.get('login')
+    email = request.GET.get('email')
+    password = request.GET.get('password')
+    first_name = request.GET.get('first_name')
+    second_name = request.GET.get('second_name')
+    if login and email and password and first_name and second_name:
+        obj = ChatUser(login=login, email=email, password=password, first_name=first_name, second_name=second_name)
+        return JsonResponse({"detail": "OK"})
+    else:
+        return JsonResponse({'detail': 'Missing arguments'})
+
+
 def authentication(request):
     login_or_email = request.GET.get('login_or_email')
     password = request.GET.get('password')
@@ -30,9 +54,9 @@ def authentication(request):
 
 
 # get chats for user
-def get_user_chats(request, user_id):
+def get_user_chats(request, user_login):
     try:
-        user_id = int(user_id)
+        user_id = str(user_login)
     except ValueError:
         return JsonResponse({'detail': 'Only int allowed'})
     chat_ids = list(ChatUsers.objects.filter(user=user_id).values_list('chat_id', flat=True))
