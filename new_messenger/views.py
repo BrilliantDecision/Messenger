@@ -12,7 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 # authentication view
-# @method_decorator(csrf_exempt)
+@method_decorator(csrf_exempt)
 def check_login(request):
     login = request.GET.get('login')
     if login:
@@ -54,9 +54,9 @@ def authentication(request):
 
 
 # get chats for user
-def get_user_chats(request, user_login):
+def get_user_chats(request, user_id):
     try:
-        user_id = str(user_login)
+        user_id = str(user_id)
     except ValueError:
         return JsonResponse({'detail': 'Only int allowed'})
     chat_ids = list(ChatUsers.objects.filter(user=user_id).values_list('chat_id', flat=True))
