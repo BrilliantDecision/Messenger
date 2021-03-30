@@ -33,7 +33,8 @@ def registration(request):
     if login and email and password and first_name and second_name:
         m = ChatUser(login=login, email=email, password=password, first_name=first_name, second_name=second_name)
         m.save()
-        return JsonResponse({"detail": "OK"})
+        obj1 = ChatUser.objects.filter(login=login, password=password).first()
+        return JsonResponse({"detail": "OK", 'user_id': obj1.id})
     else:
         return JsonResponse({'detail': 'Missing arguments'})
 
@@ -44,10 +45,12 @@ def authentication(request):
     if login_or_email and password:
         obj1 = ChatUser.objects.filter(login=login_or_email, password=password).first()
         if obj1:
-            return redirect(f'/get_user_chats/{obj1.id}/')
+            print(obj1.id)
+            return JsonResponse({'detail': 'OK', 'user_id': obj1.id})
         obj1 = ChatUser.objects.filter(email=login_or_email, password=password).first()
         if obj1:
-            return redirect(f'/get_user_chats/{obj1.id}/')
+            print(obj1.id)
+            return JsonResponse({'detail': 'OK', 'user_id': obj1.id})
         else:
             return JsonResponse({'detail': 'Incorrect login/email or password'})
     else:
@@ -123,3 +126,20 @@ def get_chat_messages(request, chat_id):
 # get logins
 def get_all_logins(request):
     return JsonResponse({'detail': list(ChatUser.objects.all().values_list('login', flat=True))})
+
+
+# create_chat
+def create_chat(request):
+    user_id = request.GET.get('user_id')
+    name = request.GET.get('name')
+    if user_id and name:
+        try:
+            user_id = int(user_id)
+            name = str(name)
+        except ValueError:
+            return JsonResponse({'detail': 'Error'})
+        m = Chat(name=name, admin=user_id)
+        m.save()
+        return JsonResponse({'detail': 'OK'})
+    else:
+        return JsonResponse({'detail': 'Missing arguments'})

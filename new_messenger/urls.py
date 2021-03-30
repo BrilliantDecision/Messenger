@@ -4,6 +4,7 @@ from new_messenger import views
 
 urlpatterns = [
     path('get_all_logins/', views.get_all_logins),
+    path('create_chat/', views.create_chat),
     path('check_login/', views.check_login),
     path('registration/', views.registration),
     path('authentication/', views.authentication),
