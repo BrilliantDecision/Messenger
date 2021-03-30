@@ -72,7 +72,7 @@ def get_user_chats(request, user_id):
             'name': chat.name,
             'create_date': chat.create_date,
             'last_message': message,
-            'image': 'https://messenger-android.herokuapp.com/' + str(chat.image),
+            'image': 'https://messenger-android.herokuapp.com/media/' + str(chat.image),
         })
     return JsonResponse({'detail': 'OK', 'user_id': user_id, 'data': res})
 
@@ -92,7 +92,7 @@ def get_chat_users(request, chat_id):
         res.append({
             'id': user.id,
             'login': user.login,
-            'image': 'https://messenger-android.herokuapp.com/' + str(user.image),
+            'image': 'https://messenger-android.herokuapp.com/media/' + str(user.image),
         })
     return JsonResponse({'detail': 'OK', 'chat_id': chat_id, 'data': res})
 
