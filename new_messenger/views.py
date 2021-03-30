@@ -31,7 +31,8 @@ def registration(request):
     first_name = request.GET.get('first_name')
     second_name = request.GET.get('second_name')
     if login and email and password and first_name and second_name:
-        ChatUser(login=login, email=email, password=password, first_name=first_name, second_name=second_name)
+        m = ChatUser(login=login, email=email, password=password, first_name=first_name, second_name=second_name)
+        m.save()
         return JsonResponse({"detail": "OK"})
     else:
         return JsonResponse({'detail': 'Missing arguments'})
