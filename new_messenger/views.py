@@ -117,3 +117,8 @@ def get_chat_messages(request, chat_id):
             'text': message.text,
         })
     return JsonResponse({'detail': 'OK', 'chat_id': chat_id, 'data': res})
+
+
+# get logins
+def get_all_logins(request):
+    return JsonResponse({'detail': list(ChatUser.objects.all().values_list('login', flat=True))})
