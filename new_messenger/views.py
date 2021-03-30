@@ -56,7 +56,7 @@ def authentication(request):
 # get chats for user
 def get_user_chats(request, user_id):
     try:
-        user_id = str(user_id)
+        user_id = int(user_id)
     except ValueError:
         return JsonResponse({'detail': 'Only int allowed'})
     chat_ids = list(ChatUsers.objects.filter(user=user_id).values_list('chat_id', flat=True))
@@ -65,10 +65,14 @@ def get_user_chats(request, user_id):
     chats = Chat.objects.filter(pk__in=chat_ids)
     res = []
     for chat in chats:
+        # Крайнее сообщение
+        message = list(Messages.objects.filter(chat_id=chat.id).order_by('-pk').values_list('text', flat=True))[0]
         res.append({
             'id': chat.id,
             'name': chat.name,
             'create_date': chat.create_date,
+            'last_message': message,
+            'image': 'https://messenger-android.herokuapp.com/' + str(chat.image),
         })
     return JsonResponse({'detail': 'OK', 'user_id': user_id, 'data': res})
 
@@ -88,6 +92,7 @@ def get_chat_users(request, chat_id):
         res.append({
             'id': user.id,
             'login': user.login,
+            'image': 'https://messenger-android.herokuapp.com/' + str(user.image),
         })
     return JsonResponse({'detail': 'OK', 'chat_id': chat_id, 'data': res})
 

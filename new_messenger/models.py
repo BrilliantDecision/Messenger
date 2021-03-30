@@ -11,6 +11,7 @@ class ChatUser(models.Model):
     status = models.TextField('Text', max_length=100)
     is_active = models.BooleanField('Is active', default=True)
     last_login = models.DateTimeField('Last login', null=True)
+    image = models.ImageField('Фото', upload_to=f'users/')
 
     def __str__(self):
         return f'{self.login}'
@@ -25,6 +26,7 @@ class Chat(models.Model):
     admin = models.ForeignKey(ChatUser, related_name='user_admin', on_delete=models.CASCADE, null=True)
     create_date = models.DateField('Create date', null=True)
     private = models.BooleanField('Is private', default=False)
+    image = models.ImageField('Фото', upload_to='chats/')
 
     def __str__(self):
         return f'Chat name: {self.name}'
