@@ -31,10 +31,13 @@ def registration(request):
     first_name = request.GET.get('first_name')
     second_name = request.GET.get('second_name')
     if login and email and password and first_name and second_name:
-        m = ChatUser(login=login, email=email, password=password, first_name=first_name, second_name=second_name)
-        m.save()
         obj1 = ChatUser.objects.filter(login=login, password=password).first()
-        return JsonResponse({"detail": "OK", 'user_id': obj1.id})
+        if obj1 is None:
+            m = ChatUser(login=login, email=email, password=password, first_name=first_name, second_name=second_name)
+            m.save()
+            return JsonResponse({"detail": "OK", 'user_id': m.id})
+        else:
+            return JsonResponse({'detail': 'The same User with that login was already created'})
     else:
         return JsonResponse({'detail': 'Missing arguments'})
 
@@ -140,6 +143,6 @@ def create_chat(request):
             return JsonResponse({'detail': 'Error'})
         m = Chat(name=name, admin=user_id)
         m.save()
-        return JsonResponse({'detail': 'OK'})
+        return JsonResponse({'detail': 'OK', 'chat_id': m.id})
     else:
         return JsonResponse({'detail': 'Missing arguments'})
